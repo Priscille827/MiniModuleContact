@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ConfirmationDemande;
-use App\Mail\NouvelleDemandeAdmin;
-use App\Models\Admin;
 use App\Models\DemandeContact;
 use App\Models\Service;
 use Illuminate\Http\Request;
@@ -41,21 +39,10 @@ class DemandeController extends Controller
         // 2) Enregistrer en base
         $demande = DemandeContact::create($validated);
 
-        // 3) Confirmation au visiteur
+        // 3) Confirmation au visiteur)
         Mail::to($demande->email)->send(new ConfirmationDemande($demande));
 
-sleep(1);
-
-        // 4) Notification à tous les admins actifs
-        $emailsAdmins = Admin::where('actif', true)
-            ->pluck('email')
-            ->all(); 
-
-        if (! empty($emailsAdmins)) {
-    Mail::bcc($emailsAdmins)->send(new NouvelleDemandeAdmin($demande));
-}
-
         return redirect()->route('contact.create')
-            ->with('success', ' Votre demande a bien été envoyée. Numéro : ' . $demande->numero_demande);
+            ->with('success', 'Votre demande a bien été envoyée. Numéro : ' . $demande->numero_demande);
     }
 }
