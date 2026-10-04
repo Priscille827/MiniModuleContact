@@ -44,6 +44,8 @@ class DemandeController extends Controller
         // 3) Confirmation au visiteur
         Mail::to($demande->email)->send(new ConfirmationDemande($demande));
 
+sleep(1);
+
         // 4) Notification à tous les admins actifs
         $emailsAdmins = Admin::where('actif', true)
             ->pluck('email')
